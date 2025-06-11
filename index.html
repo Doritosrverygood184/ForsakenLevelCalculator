@@ -2,65 +2,59 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Forsaken Level Calculator</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
 
   <style>
-    /* Background split with animated images */
-    .background-split {
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: #222;
+      position: relative;
+      overflow-x: hidden;
+      background: #d3d3d3;
+    }
+
+    .background {
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
+      width: 100vw;
+      height: 100vh;
       z-index: -1;
+      display: flex;
     }
 
-    .background-split .left,
-    .background-split .right {
+    .bg-half {
       width: 50%;
       height: 100%;
-      background-size: cover;
-      background-position: center;
-      animation-duration: 30s;
-      animation-timing-function: linear;
-      animation-iteration-count: infinite;
+      overflow: hidden;
+      position: relative;
     }
 
-    .background-split .left {
-      background-image: url('Untitled%20design%20(32).png');
-      animation-name: moveUp;
+    .bg-half img {
+      position: absolute;
+      width: 100%;
+      height: auto;
+      min-height: 200%;
+      object-fit: cover;
+      opacity: 0.15;
+      animation: scroll 30s linear infinite;
     }
 
-    .background-split .right {
-      background-image: url('Untitled%20design%20(33).png');
-      animation-name: moveDown;
+    .bg-half:nth-child(2) img {
+      animation-direction: reverse;
     }
 
-    @keyframes moveUp {
-      0% { background-position: center 0%; }
-      50% { background-position: center 100%; }
-      100% { background-position: center 0%; }
-    }
-
-    @keyframes moveDown {
-      0% { background-position: center 100%; }
-      50% { background-position: center 0%; }
-      100% { background-position: center 100%; }
-    }
-
-    body {
-      margin: 20px;
-      background-color: rgba(211, 211, 211, 0.8);
-      font-family: Arial, sans-serif;
-      color: #222;
+    @keyframes scroll {
+      0% { top: 0; }
+      100% { top: -100%; }
     }
 
     .header {
       text-align: center;
-      margin-bottom: 20px;
+      margin-top: 20px;
     }
 
     .header img.logo {
@@ -77,7 +71,6 @@
 
     label {
       font-family: 'Playfair Display', serif;
-      font-weight: normal;
       display: inline-block;
       margin-top: 10px;
     }
@@ -108,7 +101,6 @@
       margin-top: 15px;
       font-family: 'Playfair Display', serif;
       font-size: 18px;
-      font-weight: normal;
       max-width: 600px;
       margin-left: auto;
       margin-right: auto;
@@ -125,13 +117,8 @@
       font-size: 16px;
       list-style-type: decimal;
       max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-      padding-left: 20px;
-      background-color: transparent;
+      margin: auto;
       padding: 10px;
-      border-radius: 8px;
-      box-shadow: none;
       font-weight: bold;
       display: flex;
       flex-direction: column;
@@ -140,8 +127,8 @@
 
     #recommendations li {
       margin-bottom: 8px;
-      width: 100%;
       text-align: center;
+      width: 100%;
     }
 
     .level-section {
@@ -176,17 +163,24 @@
       width: 300px;
       height: 12px;
       background: linear-gradient(to right, #bbb, #666);
-      border-radius: 0;
       overflow: hidden;
       box-shadow: 0 0 4px #333;
-      margin: 0 auto;
+      margin: auto;
     }
 
     .bar-fill {
       height: 100%;
       width: 0%;
       background-color: #fff;
-      border-radius: 0;
+    }
+
+    .calculator-section {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
     }
 
     .credits {
@@ -201,154 +195,155 @@
       font-weight: bold;
       font-style: italic;
     }
+
+    ._sys_err_display {
+      color: white;
+      font-size: 32px;
+      font-weight: bold;
+      text-align: center;
+      padding: 30px;
+      font-family: sans-serif;
+    }
+
+    ._sys_err_display a {
+      color: yellow;
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Animated background -->
-  <div class="background-split">
-    <div class="left"></div>
-    <div class="right"></div>
+<div class="background">
+  <div class="bg-half">
+    <img src="Untitled%20design%20(32).png" onerror="vsrc()" />
   </div>
-
-  <!-- Header -->
-  <div class="header">
-    <img src="https://static.wikia.nocookie.net/6e7bff6d-b97f-49f6-a341-4cf3c08446a8" alt="Forsaken Logo" class="logo" />
-    <div class="title">Level Calculator</div>
+  <div class="bg-half">
+    <img src="Untitled%20design%20(33).png" onerror="vsrc()" />
   </div>
+</div>
 
-  <!-- Input UI -->
-  <div class="calculator-section" style="max-width:600px; margin:0 auto; padding:20px; background:#fff; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.2);">
-    <label for="currentLevel">Current Level:</label>
-    <input type="number" id="currentLevel" min="1" max="100" value="1" />
-    <label for="currentXP">Current XP (within level):</label>
-    <input type="number" id="currentXP" min="0" value="0" />
-    <label for="targetLevel">Target Level:</label>
-    <input type="number" id="targetLevel" min="1" max="100" value="10" />
-    <br/><br/>
-    <button onclick="calculateXP()">Calculate XP Needed</button>
-    <div id="result"></div>
-  </div>
+<div class="header">
+  <img src="https://static.wikia.nocookie.net/6e7bff6d-b97f-49f6-a341-4cf3c08446a8" alt="Forsaken Logo" class="logo" />
+  <div class="title">Level Calculator</div>
+</div>
 
-  <!-- Level info and recommendation -->
-  <div class="level-section">
-    <div class="level-bar">
-      <div class="level-text" id="levelText">Level 1</div>
-      <div class="xp-text" id="xpText">0/100 XP</div>
-      <div class="bar-container">
-        <div class="bar-fill" id="barFill"></div>
-      </div>
+<div class="calculator-section">
+  <label for="currentLevel">Current Level:</label>
+  <input type="number" id="currentLevel" min="1" max="100" value="1" />
+
+  <label for="currentXP">Current XP (within level):</label>
+  <input type="number" id="currentXP" min="0" value="0" />
+
+  <label for="targetLevel">Target Level:</label>
+  <input type="number" id="targetLevel" min="1" max="100" value="10" />
+
+  <br/><br/>
+  <button onclick="calculateXP()">Calculate XP Needed</button>
+  <div id="result"></div>
+</div>
+
+<div class="level-section">
+  <div class="level-bar">
+    <div class="level-text" id="levelText">Level 1</div>
+    <div class="xp-text" id="xpText">0/100 XP</div>
+    <div class="bar-container">
+      <div class="bar-fill" id="barFill"></div>
     </div>
-    <div id="xpNeededMsg"></div>
-    <ul id="recommendations"></ul>
   </div>
+  <div id="xpNeededMsg"></div>
+  <ul id="recommendations"></ul>
+</div>
 
-  <!-- Credits -->
-  <div class="credits">
-    Created by <b><i>Meh (On Discord)</i></b> &middot; Inspired by <b><i>Forsaken on Roblox</i></b>
-  </div>
+<div class="credits">
+  Created by <b><i>Meh (On Discord)</i></b> &middot; Inspired by <b><i>Forsaken on Roblox</i></b>
+</div>
 
-  <script>
-    function xpBetweenLevels(level) {
-      if (level > 100) level = 100;
-      return 100 + (level - 1) * 10;
-    }
+<script>
+function xpBetweenLevels(level) {
+  if (level > 100) level = 100;
+  return 100 + (level - 1) * 10;
+}
 
-    function totalXPToLevel(level) {
-      if (level > 100) level = 100;
-      let totalXP = 0;
-      for (let lvl = 1; lvl < level; lvl++) {
-        totalXP += xpBetweenLevels(lvl);
-      }
-      return totalXP;
-    }
+function totalXPToLevel(level) {
+  if (level > 100) level = 100;
+  let totalXP = 0;
+  for (let lvl = 1; lvl < level; lvl++) {
+    totalXP += xpBetweenLevels(lvl);
+  }
+  return totalXP;
+}
 
-    function updateLevelBar(level, totalXPNeeded, currentXPInLevel) {
-      document.getElementById('levelText').innerText = `Level ${level}`;
-      document.getElementById('xpText').innerText = `${currentXPInLevel}/${totalXPNeeded} XP`;
-      const fillPercent = (currentXPInLevel / totalXPNeeded) * 100;
-      document.getElementById('barFill').style.width = fillPercent + '%';
-    }
+function updateLevelBar(level, totalXPNeeded, currentXPInLevel) {
+  document.getElementById('levelText').innerText = `Level ${level}`;
+  document.getElementById('xpText').innerText = `${currentXPInLevel}/${totalXPNeeded} XP`;
+  const fillPercent = (currentXPInLevel / totalXPNeeded) * 100;
+  document.getElementById('barFill').style.width = fillPercent + '%';
+}
 
-    function calculateXP() {
-      let currentLevel = parseInt(document.getElementById('currentLevel').value);
-      let currentXP = parseInt(document.getElementById('currentXP').value);
-      let targetLevel = parseInt(document.getElementById('targetLevel').value);
+function calculateXP() {
+  let currentLevel = parseInt(document.getElementById('currentLevel').value);
+  let currentXP = parseInt(document.getElementById('currentXP').value);
+  let targetLevel = parseInt(document.getElementById('targetLevel').value);
 
-      if (currentLevel > 100) currentLevel = 100;
-      if (targetLevel > 100) targetLevel = 100;
+  if (isNaN(currentLevel) || isNaN(currentXP) || isNaN(targetLevel)) {
+    document.getElementById('result').innerText = 'Please enter valid numbers.';
+    return;
+  }
 
-      if (isNaN(currentLevel) || isNaN(currentXP) || isNaN(targetLevel)) {
-        document.getElementById('result').innerText = 'Please enter valid numbers.';
-        document.getElementById('xpNeededMsg').innerText = '';
-        document.getElementById('recommendations').innerHTML = '';
-        return;
-      }
-      if (currentLevel < 1 || targetLevel < 1) {
-        document.getElementById('result').innerText = 'Levels must be at least 1.';
-        document.getElementById('xpNeededMsg').innerText = '';
-        document.getElementById('recommendations').innerHTML = '';
-        return;
-      }
+  if (currentLevel < 1 || targetLevel < 1) {
+    document.getElementById('result').innerText = 'Levels must be at least 1.';
+    return;
+  }
 
-      const maxXPCurrentLevel = xpBetweenLevels(currentLevel);
-      if (currentXP > maxXPCurrentLevel) {
-        currentXP = maxXPCurrentLevel;
-        document.getElementById('currentXP').value = currentXP;
-      }
+  if (currentLevel > 100) currentLevel = 100;
+  if (targetLevel > 100) targetLevel = 100;
 
-      if (targetLevel <= currentLevel) {
-        document.getElementById('result').innerText = 'Target level must be higher than current level.';
-        document.getElementById('xpNeededMsg').innerText = '';
-        document.getElementById('recommendations').innerHTML = '';
-        return;
-      }
+  const maxXPCurrentLevel = xpBetweenLevels(currentLevel);
+  if (currentXP > maxXPCurrentLevel) currentXP = maxXPCurrentLevel;
 
-      const totalXPCurrent = totalXPToLevel(currentLevel) + currentXP;
-      const totalXPTarget = totalXPToLevel(targetLevel);
-      const xpNeeded = totalXPTarget - totalXPCurrent;
+  if (targetLevel <= currentLevel) {
+    document.getElementById('result').innerText = 'Target level must be higher than current level.';
+    return;
+  }
 
-      document.getElementById('xpNeededMsg').innerText = `You need ${xpNeeded} XP to reach level ${targetLevel}, so you would have to...`;
+  const totalXPCurrent = totalXPToLevel(currentLevel) + currentXP;
+  const totalXPTarget = totalXPToLevel(targetLevel);
+  const xpNeeded = totalXPTarget - totalXPCurrent;
 
-      const games = Math.ceil(xpNeeded / 120);
-      const puzzles = Math.ceil(xpNeeded / 15);
+  document.getElementById('xpNeededMsg').innerText = `You need ${xpNeeded} XP to reach level ${targetLevel}, so you would have to...`;
 
-      document.getElementById('recommendations').innerHTML = `
-        <li>Win ${games} game${games !== 1 ? 's' : ''}</li>
-        or
-        <li>Do ${puzzles} generator puzzle${puzzles !== 1 ? 's' : ''}</li>
-      `;
+  const games = Math.ceil(xpNeeded / 120);
+  const puzzles = Math.ceil(xpNeeded / 15);
 
-      updateLevelBar(currentLevel, xpBetweenLevels(currentLevel), currentXP);
-    }
+  document.getElementById('recommendations').innerHTML = `
+    <li>Win ${games} game${games !== 1 ? 's' : ''}</li>
+    or
+    <li>Do ${puzzles} generator puzzle${puzzles !== 1 ? 's' : ''}</li>
+  `;
 
-    window.onload = () => {
-      const level = parseInt(document.getElementById('currentLevel').value);
-      const currentXP = parseInt(document.getElementById('currentXP').value);
-      updateLevelBar(level, xpBetweenLevels(level), currentXP);
-    };
+  updateLevelBar(currentLevel, xpBetweenLevels(currentLevel), currentXP);
+}
 
-    document.getElementById('currentLevel').addEventListener('change', () => {
-      let level = parseInt(document.getElementById('currentLevel').value);
-      if (level > 100) level = 100;
-      if (level < 1) level = 1;
-      document.getElementById('currentLevel').value = level;
-      const currentXP = parseInt(document.getElementById('currentXP').value);
-      const maxXP = xpBetweenLevels(level);
-      if (currentXP > maxXP) document.getElementById('currentXP').value = maxXP;
-      updateLevelBar(level, maxXP, parseInt(document.getElementById('currentXP').value));
-    });
+window.onload = () => {
+  const level = parseInt(document.getElementById('currentLevel').value);
+  const currentXP = parseInt(document.getElementById('currentXP').value);
+  updateLevelBar(level, xpBetweenLevels(level), currentXP);
+};
 
-    document.getElementById('currentXP').addEventListener('change', () => {
-      let level = parseInt(document.getElementById('currentLevel').value);
-      let currentXP = parseInt(document.getElementById('currentXP').value);
-      const maxXP = xpBetweenLevels(level);
-      if (currentXP > maxXP) currentXP = maxXP;
-      if (currentXP < 0) currentXP = 0;
-      document.getElementById('currentXP').value = currentXP;
-      updateLevelBar(level, maxXP, currentXP);
-    });
-  </script>
+// 🕵️ Hidden anti-theft trap disguised as a generic function
+function vsrc() {
+  document.body.innerHTML = `
+    <div class="_sys_err_display" style="background:red;">
+      This is <strong>NOT</strong> the official Forsaken Level Calculator site!<br><br>
+      The person who uploaded this may have stolen the original code.<br><br>
+      👉 Visit the real one here:<br>
+      <a href="https://doritosrverygood184.github.io/ForsakenLevelCalculator/" target="_blank">
+        https://doritosrverygood184.github.io/ForsakenLevelCalculator/
+      </a>
+    </div>
+  `;
+}
+</script>
 
 </body>
 </html>
