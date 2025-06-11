@@ -118,10 +118,12 @@ button {
 .level-text {
   font-size: 24px;
   margin-bottom: 4px;
+  color: #fff;
 }
 .xp-text {
   font-size: 18px;
   margin-bottom: 6px;
+  color: #fff;
 }
 .bar-container {
   width: 300px;
@@ -137,6 +139,19 @@ button {
   width: 0%; /* will be set dynamically */
   background-color: #fff; /* white fill */
   border-radius: 0; /* sharp edges */
+}
+
+/* Credits styling */
+.credits {
+  text-align: center;
+  margin-top: 40px;
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  color: #222;
+}
+.credits b.i {
+  font-weight: bold;
+  font-style: italic;
 }
 </style>
 </head>
@@ -178,6 +193,11 @@ button {
   <div id="xpNeededMsg"></div>
   <!-- List of options -->
   <ul id="recommendations"></ul>
+</div>
+
+<!-- Credits -->
+<div class="credits">
+  Created by <b><i>Meh (On Discord)</i></b> &middot; Inspired by <b><i>Forsaken on Roblox</i></b>
 </div>
 
 <script>
