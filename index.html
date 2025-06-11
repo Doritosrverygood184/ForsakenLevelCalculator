@@ -2,23 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Forsaken Level Calculator</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow: auto;
-      font-family: Arial, sans-serif;
-    }
-
-    body {
-      position: relative;
-      z-index: 1;
-    }
-
+    /* Background split with animated images */
     .background-split {
       position: fixed;
       top: 0;
@@ -35,20 +24,43 @@
       height: 100%;
       background-size: cover;
       background-position: center;
+      animation-duration: 30s;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
     }
 
     .background-split .left {
       background-image: url('Untitled%20design%20(32).png');
+      animation-name: moveUp;
     }
 
     .background-split .right {
       background-image: url('Untitled%20design%20(33).png');
+      animation-name: moveDown;
     }
 
-    /* Header */
+    @keyframes moveUp {
+      0% { background-position: center 0%; }
+      50% { background-position: center 100%; }
+      100% { background-position: center 0%; }
+    }
+
+    @keyframes moveDown {
+      0% { background-position: center 100%; }
+      50% { background-position: center 0%; }
+      100% { background-position: center 100%; }
+    }
+
+    body {
+      margin: 20px;
+      background-color: rgba(211, 211, 211, 0.8);
+      font-family: Arial, sans-serif;
+      color: #222;
+    }
+
     .header {
       text-align: center;
-      margin-top: 20px;
+      margin-bottom: 20px;
     }
 
     .header img.logo {
@@ -61,16 +73,6 @@
       font-family: 'Playfair Display', serif;
       font-size: 28px;
       color: #222;
-    }
-
-    /* Input Section */
-    .calculator-section {
-      max-width: 600px;
-      margin: 20px auto;
-      padding: 20px;
-      background: rgba(255, 255, 255, 0.9);
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
     }
 
     label {
@@ -106,11 +108,12 @@
       margin-top: 15px;
       font-family: 'Playfair Display', serif;
       font-size: 18px;
+      font-weight: normal;
       max-width: 600px;
       margin-left: auto;
       margin-right: auto;
       padding: 10px;
-      background-color: rgba(255,255,255,0.9);
+      background-color: #fff;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
       text-align: center;
@@ -128,6 +131,7 @@
       background-color: transparent;
       padding: 10px;
       border-radius: 8px;
+      box-shadow: none;
       font-weight: bold;
       display: flex;
       flex-direction: column;
@@ -200,7 +204,8 @@
   </style>
 </head>
 <body>
-  <!-- Split Background -->
+
+  <!-- Animated background -->
   <div class="background-split">
     <div class="left"></div>
     <div class="right"></div>
@@ -212,23 +217,20 @@
     <div class="title">Level Calculator</div>
   </div>
 
-  <!-- Calculator -->
-  <div class="calculator-section">
+  <!-- Input UI -->
+  <div class="calculator-section" style="max-width:600px; margin:0 auto; padding:20px; background:#fff; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.2);">
     <label for="currentLevel">Current Level:</label>
     <input type="number" id="currentLevel" min="1" max="100" value="1" />
-
     <label for="currentXP">Current XP (within level):</label>
     <input type="number" id="currentXP" min="0" value="0" />
-
     <label for="targetLevel">Target Level:</label>
     <input type="number" id="targetLevel" min="1" max="100" value="10" />
-    <br><br>
-
+    <br/><br/>
     <button onclick="calculateXP()">Calculate XP Needed</button>
     <div id="result"></div>
   </div>
 
-  <!-- Level and XP -->
+  <!-- Level info and recommendation -->
   <div class="level-section">
     <div class="level-bar">
       <div class="level-text" id="levelText">Level 1</div>
@@ -246,7 +248,6 @@
     Created by <b><i>Meh (On Discord)</i></b> &middot; Inspired by <b><i>Forsaken on Roblox</i></b>
   </div>
 
-  <!-- Script -->
   <script>
     function xpBetweenLevels(level) {
       if (level > 100) level = 100;
@@ -279,14 +280,27 @@
 
       if (isNaN(currentLevel) || isNaN(currentXP) || isNaN(targetLevel)) {
         document.getElementById('result').innerText = 'Please enter valid numbers.';
+        document.getElementById('xpNeededMsg').innerText = '';
+        document.getElementById('recommendations').innerHTML = '';
+        return;
+      }
+      if (currentLevel < 1 || targetLevel < 1) {
+        document.getElementById('result').innerText = 'Levels must be at least 1.';
+        document.getElementById('xpNeededMsg').innerText = '';
+        document.getElementById('recommendations').innerHTML = '';
         return;
       }
 
       const maxXPCurrentLevel = xpBetweenLevels(currentLevel);
-      if (currentXP > maxXPCurrentLevel) currentXP = maxXPCurrentLevel;
+      if (currentXP > maxXPCurrentLevel) {
+        currentXP = maxXPCurrentLevel;
+        document.getElementById('currentXP').value = currentXP;
+      }
 
       if (targetLevel <= currentLevel) {
         document.getElementById('result').innerText = 'Target level must be higher than current level.';
+        document.getElementById('xpNeededMsg').innerText = '';
+        document.getElementById('recommendations').innerHTML = '';
         return;
       }
 
@@ -313,6 +327,28 @@
       const currentXP = parseInt(document.getElementById('currentXP').value);
       updateLevelBar(level, xpBetweenLevels(level), currentXP);
     };
+
+    document.getElementById('currentLevel').addEventListener('change', () => {
+      let level = parseInt(document.getElementById('currentLevel').value);
+      if (level > 100) level = 100;
+      if (level < 1) level = 1;
+      document.getElementById('currentLevel').value = level;
+      const currentXP = parseInt(document.getElementById('currentXP').value);
+      const maxXP = xpBetweenLevels(level);
+      if (currentXP > maxXP) document.getElementById('currentXP').value = maxXP;
+      updateLevelBar(level, maxXP, parseInt(document.getElementById('currentXP').value));
+    });
+
+    document.getElementById('currentXP').addEventListener('change', () => {
+      let level = parseInt(document.getElementById('currentLevel').value);
+      let currentXP = parseInt(document.getElementById('currentXP').value);
+      const maxXP = xpBetweenLevels(level);
+      if (currentXP > maxXP) currentXP = maxXP;
+      if (currentXP < 0) currentXP = 0;
+      document.getElementById('currentXP').value = currentXP;
+      updateLevelBar(level, maxXP, currentXP);
+    });
   </script>
+
 </body>
 </html>
