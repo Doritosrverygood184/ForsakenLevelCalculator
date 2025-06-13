@@ -113,12 +113,6 @@
       font-family: Arial, sans-serif;
     }
 
-    select {
-      margin-top: 20px;
-      padding: 6px 12px;
-      font-family: 'Playfair Display', serif;
-    }
-
     button {
       margin-top: 15px;
       padding: 8px 16px;
@@ -213,17 +207,12 @@
       border-radius: 0;
     }
 
-    .credits {
-      text-align: center;
-      margin-top: 40px;
-      font-family: 'Playfair Display', serif;
+    #characterSelect {
+      display: block;
+      margin: 20px auto;
       font-size: 16px;
-      color: #222;
-    }
-
-    .credits b.i {
-      font-weight: bold;
-      font-style: italic;
+      font-family: 'Playfair Display', serif;
+      padding: 8px;
     }
 
     #characterDisplay {
@@ -236,8 +225,21 @@
       width: 320px;
       max-height: 200px;
       object-fit: contain;
-      border-radius: 8px;
-      box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .credits {
+      text-align: center;
+      margin-top: 40px;
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      color: #222;
+    }
+
+    .credits b.i {
+      font-weight: bold;
+      font-style: italic;
     }
   </style>
 </head>
@@ -258,16 +260,19 @@
   }
 </script>
 
+<!-- Background -->
 <div class="background-split">
   <div class="left"></div>
   <div class="right"></div>
 </div>
 
+<!-- Header -->
 <div class="header">
   <img src="https://static.wikia.nocookie.net/6e7bff6d-b97f-49f6-a341-4cf3c08446a8" alt="Forsaken Logo" class="logo" />
   <div class="title">Level Calculator</div>
 </div>
 
+<!-- Calculator UI -->
 <div class="calculator-section" style="max-width:600px; margin:0 auto; padding:20px; background:#fff; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.2);">
   <label for="currentLevel">Current Level:</label>
   <input type="number" id="currentLevel" min="1" max="100" value="1" />
@@ -277,22 +282,20 @@
   <input type="number" id="targetLevel" min="1" max="100" value="10" />
   <br/><br/>
   <button onclick="calculateXP()">Calculate XP Needed</button>
+  <div id="result"></div>
 </div>
 
-<!-- Character Dropdown -->
-<div style="text-align:center; margin-top:20px;">
-  <label for="characterSelect">Select Character:</label>
-  <select id="characterSelect" onchange="updateCharacterImage()">
-    <option value="Noob">Noob</option>
-  </select>
-</div>
+<!-- Character Select -->
+<select id="characterSelect" onchange="updateCharacterImage()">
+  <option value="Noob">Noob</option>
+</select>
 
 <!-- Character Image -->
 <div id="characterDisplay">
-  <img src="Noob.png" alt="Character Image" id="characterImage" />
+  <img id="characterImage" src="Noob.png" alt="Character Image">
 </div>
 
-<!-- Level Section -->
+<!-- Level Bar & Results -->
 <div class="level-section">
   <div class="level-bar">
     <div class="level-text" id="levelText">Level 1</div>
@@ -305,16 +308,19 @@
   <ul id="recommendations"></ul>
 </div>
 
+<!-- Credits -->
 <div class="credits">
   Created by <b><i>Meh (On Discord)</i></b> &middot; Inspired by <b><i>Forsaken on Roblox</i></b>
 </div>
 
 <script>
   function xpBetweenLevels(level) {
+    if (level > 100) level = 100;
     return 100 + (level - 1) * 10;
   }
 
   function totalXPToLevel(level) {
+    if (level > 100) level = 100;
     let totalXP = 0;
     for (let lvl = 1; lvl < level; lvl++) {
       totalXP += xpBetweenLevels(lvl);
@@ -337,7 +343,19 @@
     if (currentLevel > 100) currentLevel = 100;
     if (targetLevel > 100) targetLevel = 100;
 
-    if (isNaN(currentLevel) || isNaN(currentXP) || isNaN(targetLevel)) return;
+    if (isNaN(currentLevel) || isNaN(currentXP) || isNaN(targetLevel)) {
+      document.getElementById('result').innerText = 'Please enter valid numbers.';
+      document.getElementById('xpNeededMsg').innerText = '';
+      document.getElementById('recommendations').innerHTML = '';
+      return;
+    }
+
+    if (currentLevel < 1 || targetLevel < 1) {
+      document.getElementById('result').innerText = 'Levels must be at least 1.';
+      document.getElementById('xpNeededMsg').innerText = '';
+      document.getElementById('recommendations').innerHTML = '';
+      return;
+    }
 
     const maxXPCurrentLevel = xpBetweenLevels(currentLevel);
     if (currentXP > maxXPCurrentLevel) {
@@ -347,6 +365,8 @@
 
     if (targetLevel <= currentLevel) {
       document.getElementById('result').innerText = 'Target level must be higher than current level.';
+      document.getElementById('xpNeededMsg').innerText = '';
+      document.getElementById('recommendations').innerHTML = '';
       return;
     }
 
