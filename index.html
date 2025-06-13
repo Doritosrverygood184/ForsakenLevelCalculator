@@ -113,6 +113,12 @@
       font-family: Arial, sans-serif;
     }
 
+    select {
+      margin-top: 20px;
+      padding: 6px 12px;
+      font-family: 'Playfair Display', serif;
+    }
+
     button {
       margin-top: 15px;
       padding: 8px 16px;
@@ -207,28 +213,6 @@
       border-radius: 0;
     }
 
-    .character-selection {
-      text-align: center;
-      margin-top: 30px;
-    }
-
-    .character-selection select {
-      padding: 6px 12px;
-      font-family: 'Playfair Display', serif;
-    }
-
-    #characterDisplay img {
-      width: 150px;
-      border-radius: 8px;
-      box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
-    }
-
-    #characterName {
-      font-family: 'Playfair Display', serif;
-      font-size: 18px;
-      margin-top: 10px;
-    }
-
     .credits {
       text-align: center;
       margin-top: 40px;
@@ -240,6 +224,20 @@
     .credits b.i {
       font-weight: bold;
       font-style: italic;
+    }
+
+    #characterDisplay {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    #characterDisplay img {
+      width: 320px;
+      max-height: 200px;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
     }
   </style>
 </head>
@@ -279,22 +277,22 @@
   <input type="number" id="targetLevel" min="1" max="100" value="10" />
   <br/><br/>
   <button onclick="calculateXP()">Calculate XP Needed</button>
-  <div id="result"></div>
 </div>
 
-<!-- Character Dropdown and Image -->
-<div class="character-selection">
-  <label for="characterDropdown">Select a Character:</label>
-  <select id="characterDropdown">
+<!-- Character Dropdown -->
+<div style="text-align:center; margin-top:20px;">
+  <label for="characterSelect">Select Character:</label>
+  <select id="characterSelect" onchange="updateCharacterImage()">
     <option value="Noob">Noob</option>
   </select>
-
-  <div id="characterDisplay" style="margin-top: 20px;">
-    <img id="characterImage" src="Noob.png" alt="Noob Character" />
-    <div id="characterName">Noob</div>
-  </div>
 </div>
 
+<!-- Character Image -->
+<div id="characterDisplay">
+  <img src="Noob.png" alt="Character Image" id="characterImage" />
+</div>
+
+<!-- Level Section -->
 <div class="level-section">
   <div class="level-bar">
     <div class="level-text" id="levelText">Level 1</div>
@@ -313,12 +311,10 @@
 
 <script>
   function xpBetweenLevels(level) {
-    if (level > 100) level = 100;
     return 100 + (level - 1) * 10;
   }
 
   function totalXPToLevel(level) {
-    if (level > 100) level = 100;
     let totalXP = 0;
     for (let lvl = 1; lvl < level; lvl++) {
       totalXP += xpBetweenLevels(lvl);
@@ -341,19 +337,7 @@
     if (currentLevel > 100) currentLevel = 100;
     if (targetLevel > 100) targetLevel = 100;
 
-    if (isNaN(currentLevel) || isNaN(currentXP) || isNaN(targetLevel)) {
-      document.getElementById('result').innerText = 'Please enter valid numbers.';
-      document.getElementById('xpNeededMsg').innerText = '';
-      document.getElementById('recommendations').innerHTML = '';
-      return;
-    }
-
-    if (currentLevel < 1 || targetLevel < 1) {
-      document.getElementById('result').innerText = 'Levels must be at least 1.';
-      document.getElementById('xpNeededMsg').innerText = '';
-      document.getElementById('recommendations').innerHTML = '';
-      return;
-    }
+    if (isNaN(currentLevel) || isNaN(currentXP) || isNaN(targetLevel)) return;
 
     const maxXPCurrentLevel = xpBetweenLevels(currentLevel);
     if (currentXP > maxXPCurrentLevel) {
@@ -363,8 +347,6 @@
 
     if (targetLevel <= currentLevel) {
       document.getElementById('result').innerText = 'Target level must be higher than current level.';
-      document.getElementById('xpNeededMsg').innerText = '';
-      document.getElementById('recommendations').innerHTML = '';
       return;
     }
 
@@ -386,39 +368,20 @@
     updateLevelBar(currentLevel, xpBetweenLevels(currentLevel), currentXP);
   }
 
+  function updateCharacterImage() {
+    const selected = document.getElementById("characterSelect").value;
+    const img = document.getElementById("characterImage");
+    if (selected === "Noob") {
+      img.src = "Noob.png";
+    }
+  }
+
   window.onload = () => {
     const level = parseInt(document.getElementById('currentLevel').value);
     const currentXP = parseInt(document.getElementById('currentXP').value);
     updateLevelBar(level, xpBetweenLevels(level), currentXP);
+    updateCharacterImage();
   };
-
-  document.getElementById('currentLevel').addEventListener('change', () => {
-    let level = parseInt(document.getElementById('currentLevel').value);
-    if (level > 100) level = 100;
-    if (level < 1) level = 1;
-    document.getElementById('currentLevel').value = level;
-    const currentXP = parseInt(document.getElementById('currentXP').value);
-    const maxXP = xpBetweenLevels(level);
-    if (currentXP > maxXP) document.getElementById('currentXP').value = maxXP;
-    updateLevelBar(level, maxXP, parseInt(document.getElementById('currentXP').value));
-  });
-
-  document.getElementById('currentXP').addEventListener('change', () => {
-    let level = parseInt(document.getElementById('currentLevel').value);
-    let currentXP = parseInt(document.getElementById('currentXP').value);
-    const maxXP = xpBetweenLevels(level);
-    if (currentXP > maxXP) currentXP = maxXP;
-    if (currentXP < 0) currentXP = 0;
-    document.getElementById('currentXP').value = currentXP;
-    updateLevelBar(level, maxXP, currentXP);
-  });
-
-  document.getElementById('characterDropdown').addEventListener('change', function () {
-    const character = this.value;
-    document.getElementById('characterImage').src = character + '.png';
-    document.getElementById('characterImage').alt = character + ' Character';
-    document.getElementById('characterName').innerText = character;
-  });
 </script>
 
 </body>
