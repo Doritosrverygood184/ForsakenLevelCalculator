@@ -13,7 +13,6 @@
       color: #222;
     }
 
-    /* Warning overlay */
     #stolenOverlay {
       position: fixed;
       top: 0;
@@ -39,7 +38,6 @@
       text-decoration: underline;
     }
 
-    /* Background split animation */
     .background-split {
       position: fixed;
       top: 0;
@@ -209,6 +207,28 @@
       border-radius: 0;
     }
 
+    .character-selection {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .character-selection select {
+      padding: 6px 12px;
+      font-family: 'Playfair Display', serif;
+    }
+
+    #characterDisplay img {
+      width: 150px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+    }
+
+    #characterName {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      margin-top: 10px;
+    }
+
     .credits {
       text-align: center;
       margin-top: 40px;
@@ -240,19 +260,16 @@
   }
 </script>
 
-<!-- Background -->
 <div class="background-split">
   <div class="left"></div>
   <div class="right"></div>
 </div>
 
-<!-- Header -->
 <div class="header">
   <img src="https://static.wikia.nocookie.net/6e7bff6d-b97f-49f6-a341-4cf3c08446a8" alt="Forsaken Logo" class="logo" />
   <div class="title">Level Calculator</div>
 </div>
 
-<!-- Calculator UI -->
 <div class="calculator-section" style="max-width:600px; margin:0 auto; padding:20px; background:#fff; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.2);">
   <label for="currentLevel">Current Level:</label>
   <input type="number" id="currentLevel" min="1" max="100" value="1" />
@@ -265,7 +282,19 @@
   <div id="result"></div>
 </div>
 
-<!-- Level bar and results -->
+<!-- Character Dropdown and Image -->
+<div class="character-selection">
+  <label for="characterDropdown">Select a Character:</label>
+  <select id="characterDropdown">
+    <option value="Noob">Noob</option>
+  </select>
+
+  <div id="characterDisplay" style="margin-top: 20px;">
+    <img id="characterImage" src="Noob.png" alt="Noob Character" />
+    <div id="characterName">Noob</div>
+  </div>
+</div>
+
 <div class="level-section">
   <div class="level-bar">
     <div class="level-text" id="levelText">Level 1</div>
@@ -278,7 +307,6 @@
   <ul id="recommendations"></ul>
 </div>
 
-<!-- Credits -->
 <div class="credits">
   Created by <b><i>Meh (On Discord)</i></b> &middot; Inspired by <b><i>Forsaken on Roblox</i></b>
 </div>
@@ -383,6 +411,13 @@
     if (currentXP < 0) currentXP = 0;
     document.getElementById('currentXP').value = currentXP;
     updateLevelBar(level, maxXP, currentXP);
+  });
+
+  document.getElementById('characterDropdown').addEventListener('change', function () {
+    const character = this.value;
+    document.getElementById('characterImage').src = character + '.png';
+    document.getElementById('characterImage').alt = character + ' Character';
+    document.getElementById('characterName').innerText = character;
   });
 </script>
 
