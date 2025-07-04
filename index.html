@@ -13,7 +13,7 @@
       color: #222;
     }
 
-    /* Warning overlay */
+    /* Warning overlay for stolen site */
     #stolenOverlay {
       position: fixed;
       top: 0;
@@ -22,7 +22,7 @@
       height: 100vh;
       background-color: black;
       color: white;
-      display: none; /* Hidden by default */
+      display: flex;
       justify-content: center;
       align-items: center;
       flex-direction: column;
@@ -31,24 +31,11 @@
       text-align: center;
       padding: 20px;
     }
-
-    #stolenOverlay.show {
-      display: flex; /* Show when needed */
-    }
-
     #stolenOverlay a {
       color: #00f0ff;
       font-weight: bold;
       margin-top: 10px;
       text-decoration: underline;
-    }
-
-    #stolenOverlay label {
-      margin-top: 20px;
-      font-weight: normal;
-      cursor: pointer;
-      font-size: 16px;
-      user-select: none;
     }
 
     /* Background split animation */
@@ -61,7 +48,6 @@
       display: flex;
       z-index: -1;
     }
-
     .background-split .left,
     .background-split .right {
       width: 50%;
@@ -72,23 +58,19 @@
       animation-timing-function: linear;
       animation-iteration-count: infinite;
     }
-
     .background-split .left {
       background-image: url('Untitled%20design%20(32).png');
       animation-name: moveUp;
     }
-
     .background-split .right {
       background-image: url('Untitled%20design%20(33).png');
       animation-name: moveDown;
     }
-
     @keyframes moveUp {
       0% { background-position: center 0%; }
       50% { background-position: center 100%; }
       100% { background-position: center 0%; }
     }
-
     @keyframes moveDown {
       0% { background-position: center 100%; }
       50% { background-position: center 0%; }
@@ -99,26 +81,22 @@
       text-align: center;
       margin-bottom: 20px;
     }
-
     .header img.logo {
       width: 200px;
       display: block;
       margin: 0 auto 10px;
     }
-
     .header .title {
       font-family: 'Playfair Display', serif;
       font-size: 28px;
       color: #222;
     }
-
     label {
       font-family: 'Playfair Display', serif;
       font-weight: normal;
       display: inline-block;
       margin-top: 10px;
     }
-
     input[type="number"] {
       width: 80px;
       padding: 4px 8px;
@@ -126,21 +104,18 @@
       margin-right: 20px;
       font-family: Arial, sans-serif;
     }
-
     button {
       margin-top: 15px;
       padding: 8px 16px;
       font-family: 'Playfair Display', serif;
       cursor: pointer;
     }
-
     #result {
       margin-top: 15px;
       font-family: 'Playfair Display', serif;
       font-size: 18px;
       font-weight: bold;
     }
-
     #xpNeededMsg {
       margin-top: 15px;
       font-family: 'Playfair Display', serif;
@@ -154,7 +129,6 @@
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
       text-align: center;
     }
-
     #recommendations {
       margin-top: 15px;
       font-family: 'Playfair Display', serif;
@@ -169,20 +143,17 @@
       flex-direction: column;
       align-items: center;
     }
-
     #recommendations li {
       margin-bottom: 8px;
       width: 100%;
       text-align: center;
     }
-
     .level-section {
       margin-top: 30px;
       display: flex;
       flex-direction: column;
       align-items: center;
     }
-
     .level-bar {
       text-align: center;
       background-color: #2b2b2b;
@@ -191,19 +162,16 @@
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
       width: 350px;
     }
-
     .level-text {
       font-size: 24px;
       margin-bottom: 4px;
       color: #fff;
     }
-
     .xp-text {
       font-size: 18px;
       margin-bottom: 6px;
       color: #fff;
     }
-
     .bar-container {
       width: 300px;
       height: 12px;
@@ -213,14 +181,12 @@
       box-shadow: 0 0 4px #333;
       margin: 0 auto;
     }
-
     .bar-fill {
       height: 100%;
       width: 0%;
       background-color: #fff;
       border-radius: 0;
     }
-
     .credits {
       text-align: center;
       margin-top: 40px;
@@ -228,103 +194,175 @@
       font-size: 16px;
       color: #222;
     }
-
     .credits b.i {
       font-weight: bold;
       font-style: italic;
+    }
+
+    /* Browser Warning Popup */
+
+    #overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.5);
+      z-index: 100000;
+    }
+    #browserPopup {
+      display: none;
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #333;
+      color: #eee;
+      border: 2px solid #888;
+      padding: 20px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.6);
+      z-index: 100001;
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      max-width: 360px;
+      border-radius: 8px;
+    }
+    #browserPopup img {
+      width: 90%;
+      height: auto;
+      margin-bottom: 8px;
+    }
+    #browserPopup h2 {
+      margin: 0 0 10px;
+    }
+    #browserPopup hr {
+      border: none;
+      height: 1px;
+      background: #666;
+      margin: 10px 0;
+    }
+    #closeBtn {
+      position: absolute;
+      top: 5px; right: 10px;
+      color: #aaa;
+      background: none;
+      border: none;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      font-family: 'Playfair Display', serif;
+    }
+    #closeBtn:hover {
+      color: #fff;
+    }
+    #dontShow {
+      margin-top: 10px;
+    }
+    #dontShow label {
+      font-size: 14px;
+      user-select: none;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
-  <!-- Warning Overlay -->
-  <div id="stolenOverlay">
-    <h1>This is not the official Forsaken Level Calculator site</h1>
-    <p>This version was likely stolen or cloned. Please visit the original site instead:</p>
-    <a href="https://doritosrverygood184.github.io/ForsakenLevelCalculator/" target="_blank" rel="noopener noreferrer">
-      https://doritosrverygood184.github.io/ForsakenLevelCalculator/
-    </a>
-    <label>
-      <input type="checkbox" id="dontShowAgain" />
-      Don't show this message again
-    </label>
-  </div>
-
-  <!-- Background -->
-  <div class="background-split">
-    <div class="left"></div>
-    <div class="right"></div>
-  </div>
-
-  <!-- Header -->
-  <div class="header">
-    <img src="https://static.wikia.nocookie.net/6e7bff6d-b97f-49f6-a341-4cf3c08446a8" alt="Forsaken Logo" class="logo" />
-    <div class="title">Level Calculator</div>
-  </div>
-
-  <!-- Calculator UI -->
-  <div class="calculator-section" style="max-width:600px; margin:0 auto; padding:20px; background:#fff; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.2);">
-    <label for="currentLevel">Current Level:</label>
-    <input type="number" id="currentLevel" min="1" max="100" value="1" />
-    <label for="currentXP">Current XP (within level):</label>
-    <input type="number" id="currentXP" min="0" value="0" />
-    <label for="targetLevel">Target Level:</label>
-    <input type="number" id="targetLevel" min="1" max="100" value="10" />
-    <br/><br/>
-    <button onclick="calculateXP()">Calculate XP Needed</button>
-    <div id="result"></div>
-  </div>
-
-  <!-- Level bar and results -->
-  <div class="level-section">
-    <div class="level-bar">
-      <div class="level-text" id="levelText">Level 1</div>
-      <div class="xp-text" id="xpText">0/100 XP</div>
-      <div class="bar-container">
-        <div class="bar-fill" id="barFill"></div>
+<script>
+  const allowedURL = "https://doritosrverygood184.github.io/ForsakenLevelCalculator/";
+  if (window.location.href !== allowedURL) {
+    document.body.innerHTML = `
+      <div id="stolenOverlay">
+        <h1>This is not the official Forsaken Level Calculator site</h1>
+        <p>This version was likely stolen or cloned. Please visit the original site instead:</p>
+        <a href="https://doritosrverygood184.github.io/ForsakenLevelCalculator/" target="_blank">
+          https://doritosrverygood184.github.io/ForsakenLevelCalculator/
+        </a>
       </div>
-    </div>
-    <div id="xpNeededMsg"></div>
-    <ul id="recommendations"></ul>
-  </div>
+    `;
+  }
+</script>
 
-  <!-- Credits -->
-  <div class="credits">
-    Created by <b><i>Meh (On Discord)</i></b> &middot; Inspired by <b><i>Forsaken on Roblox</i></b>
+<!-- Browser Warning Popup & overlay -->
+<div id="overlay"></div>
+<div id="browserPopup">
+  <button id="closeBtn" aria-label="Close" onclick="closePopup()">×</button>
+  <img src="https://static.wikia.nocookie.net/6e7bff6d-b97f-49f6-a341-4cf3c08446a8" alt="Notice Image" />
+  <h2>Level Calculator</h2>
+  <hr />
+  <p>For the best experience,<br />please use a Google browser!</p>
+  <div id="dontShow">
+    <input type="checkbox" id="checkbox" /> <label for="checkbox">Don't show again?</label>
   </div>
+</div>
+
+<!-- Background -->
+<div class="background-split">
+  <div class="left"></div>
+  <div class="right"></div>
+</div>
+
+<!-- Header -->
+<div class="header">
+  <img src="https://static.wikia.nocookie.net/6e7bff6d-b97f-49f6-a341-4cf3c08446a8" alt="Forsaken Logo" class="logo" />
+  <div class="title">Level Calculator</div>
+</div>
+
+<!-- Calculator UI -->
+<div class="calculator-section" style="max-width:600px; margin:0 auto; padding:20px; background:#fff; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.2);">
+  <label for="currentLevel">Current Level:</label>
+  <input type="number" id="currentLevel" min="1" max="100" value="1" />
+  <label for="currentXP">Current XP (within level):</label>
+  <input type="number" id="currentXP" min="0" value="0" />
+  <label for="targetLevel">Target Level:</label>
+  <input type="number" id="targetLevel" min="1" max="100" value="10" />
+  <br/><br/>
+  <button onclick="calculateXP()">Calculate XP Needed</button>
+  <div id="result"></div>
+</div>
+
+<!-- Level bar and results -->
+<div class="level-section">
+  <div class="level-bar">
+    <div class="level-text" id="levelText">Level 1</div>
+    <div class="xp-text" id="xpText">0/100 XP</div>
+    <div class="bar-container">
+      <div class="bar-fill" id="barFill"></div>
+    </div>
+  </div>
+  <div id="xpNeededMsg"></div>
+  <ul id="recommendations"></ul>
+</div>
+
+<!-- Credits -->
+<div class="credits">
+  Created by <b><i>Meh (On Discord)</i></b> &middot; Inspired by <b><i>Forsaken on Roblox</i></b>
+</div>
 
 <script>
-  // Allowed URL for official site
-  const allowedURL = "https://doritosrverygood184.github.io/ForsakenLevelCalculator/";
-
-  // Check localStorage for "dontShowAgain" flag
-  const dontShowAgain = localStorage.getItem('dontShowAgainForsaken');
-
-  function showOverlay() {
-    const overlay = document.getElementById('stolenOverlay');
-    overlay.classList.add('show');
+  // Browser detection and popup logic
+  function isChrome() {
+    const ua = navigator.userAgent.toLowerCase();
+    return ua.includes("chrome") && !ua.includes("edg") && !ua.includes("opr");
   }
 
-  // Show overlay only if URL doesn't match and user hasn't checked "Don't show again"
-  if (window.location.href !== allowedURL && dontShowAgain !== "true") {
-    // Show the overlay
-    showOverlay();
-
-    // Disable page interaction behind overlay by focusing overlay
-    // Optionally, you can add keyboard and click blocking here if needed.
+  function showPopup() {
+    document.getElementById('browserPopup').style.display = 'block';
+    document.getElementById('overlay').style.display = 'block';
+  }
+  function closePopup() {
+    if (document.getElementById('checkbox').checked) {
+      localStorage.setItem('noPopup', 'true');
+    }
+    document.getElementById('browserPopup').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
   }
 
-  // Handle checkbox change
-  document.getElementById('dontShowAgain').addEventListener('change', function () {
-    if (this.checked) {
-      localStorage.setItem('dontShowAgainForsaken', 'true');
-    } else {
-      localStorage.removeItem('dontShowAgainForsaken');
+  window.addEventListener('load', () => {
+    const noPopup = localStorage.getItem('noPopup') === 'true';
+    if (!isChrome() && !noPopup) {
+      showPopup();
     }
   });
 
-
-  // --- Calculator logic below ---
+  // XP calculator code
 
   function xpBetweenLevels(level) {
     if (level > 100) level = 100;
