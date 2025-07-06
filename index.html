@@ -2,471 +2,183 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Forsaken Level Calculator</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
-      background-color: rgba(211, 211, 211, 0.8);
-      font-family: Arial, sans-serif;
-      color: #222;
-    }
-
-    #stolenOverlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: black;
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      z-index: 99999;
       font-family: 'Playfair Display', serif;
-      text-align: center;
-      padding: 20px;
-    }
-    #stolenOverlay a {
-      color: #00f0ff;
-      font-weight: bold;
-      margin-top: 10px;
-      text-decoration: underline;
-    }
-
-    .background-split {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      z-index: -1;
-    }
-    .background-split .left,
-    .background-split .right {
-      width: 50%;
-      height: 100%;
+      color: white;
+      background-image: url('https://static.wikia.nocookie.net/6e7bff6d-b97f-49f6-a341-4cf3c08446a8');
       background-size: cover;
       background-position: center;
-      animation-duration: 30s;
-      animation-timing-function: linear;
-      animation-iteration-count: infinite;
-    }
-    .background-split .left {
-      background-image: url('Untitled%20design%20(32).png');
-      animation-name: moveUp;
-    }
-    .background-split .right {
-      background-image: url('Untitled%20design%20(33).png');
-      animation-name: moveDown;
-    }
-    @keyframes moveUp {
-      0% { background-position: center 0%; }
-      50% { background-position: center 100%; }
-      100% { background-position: center 0%; }
-    }
-    @keyframes moveDown {
-      0% { background-position: center 100%; }
-      50% { background-position: center 0%; }
-      100% { background-position: center 100%; }
+      background-attachment: fixed;
     }
 
-    .header {
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: -1;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      padding: 20px;
       text-align: center;
+    }
+
+    .title {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .calculator {
+      background-color: #111;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
       margin-bottom: 20px;
     }
-    .header img.logo {
-      width: 200px;
-      display: block;
-      margin: 0 auto 10px;
-    }
-    .header .title {
-      font-family: 'Playfair Display', serif;
-      font-size: 28px;
-      color: #222;
-    }
-    label {
-      font-family: 'Playfair Display', serif;
-      font-weight: normal;
-      display: inline-block;
-      margin-top: 10px;
-    }
+
     input[type="number"] {
-      width: 80px;
-      padding: 4px 8px;
-      margin-left: 10px;
-      margin-right: 20px;
-      font-family: Arial, sans-serif;
-    }
-    button {
-      margin-top: 15px;
-      padding: 8px 16px;
-      font-family: 'Playfair Display', serif;
-      cursor: pointer;
-    }
-    #result {
-      margin-top: 15px;
-      font-family: 'Playfair Display', serif;
-      font-size: 18px;
-      font-weight: bold;
-    }
-    #xpNeededMsg {
-      margin-top: 15px;
-      font-family: 'Playfair Display', serif;
-      font-size: 18px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-      padding: 10px;
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      width: 60px;
+      padding: 5px;
+      margin: 5px;
+      border-radius: 4px;
+      border: none;
+      font-size: 1rem;
       text-align: center;
-    }
-    #recommendations {
-      margin-top: 15px;
-      font-family: 'Playfair Display', serif;
-      font-size: 16px;
-      list-style-type: decimal;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-      padding-left: 20px;
-      font-weight: bold;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    #recommendations li {
-      margin-bottom: 8px;
-      width: 100%;
-      text-align: center;
-    }
-    .level-section {
-      margin-top: 30px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .level-bar {
-      text-align: center;
-      background-color: #2b2b2b;
-      padding: 20px 30px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-      width: 350px;
-    }
-    .level-text {
-      font-size: 24px;
-      margin-bottom: 4px;
-      color: #fff;
-    }
-    .xp-text {
-      font-size: 18px;
-      margin-bottom: 6px;
-      color: #fff;
-    }
-    .bar-container {
-      width: 300px;
-      height: 12px;
-      background: linear-gradient(to right, #bbb, #666);
-      border-radius: 0;
-      overflow: hidden;
-      box-shadow: 0 0 4px #333;
-      margin: 0 auto;
-    }
-    .bar-fill {
-      height: 100%;
-      width: 0%;
-      background-color: #fff;
-      border-radius: 0;
-      transition: width 0.4s ease-in-out;
-    }
-    .credits {
-      text-align: center;
-      margin-top: 40px;
-      font-family: 'Playfair Display', serif;
-      font-size: 16px;
-      color: #222;
-    }
-    .credits b.i {
-      font-weight: bold;
-      font-style: italic;
     }
 
-    #overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background: rgba(0,0,0,0.5);
-      z-index: 100000;
+    label {
+      font-size: 1rem;
+      margin: 10px;
+      display: inline-block;
     }
-    #browserPopup {
-      display: none;
-      position: fixed;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: #333;
-      color: #eee;
-      border: 2px solid #888;
-      padding: 20px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.6);
-      z-index: 100001;
-      text-align: center;
-      font-family: 'Playfair Display', serif;
-      max-width: 360px;
-      border-radius: 8px;
-    }
-    #browserPopup img {
-      width: 90%;
-      height: auto;
-      margin-bottom: 8px;
-    }
-    #browserPopup h2 {
-      margin: 0 0 10px;
-    }
-    #browserPopup hr {
-      border: none;
-      height: 1px;
-      background: #666;
-      margin: 10px 0;
-    }
-    #closeBtn {
-      position: absolute;
-      top: 5px; right: 10px;
-      color: #aaa;
-      background: none;
-      border: none;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-      font-family: 'Playfair Display', serif;
-    }
-    #closeBtn:hover {
-      color: #fff;
-    }
-    #dontShow {
+
+    .vip-check {
       margin-top: 10px;
     }
-    #dontShow label {
-      font-size: 14px;
-      user-select: none;
+
+    button {
+      background-color: #333;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      margin-top: 15px;
+      border-radius: 6px;
       cursor: pointer;
+    }
+
+    .xp-display {
+      background-color: #222;
+      padding: 20px;
+      border-radius: 12px;
+      width: 300px;
+    }
+
+    .xp-level {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+
+    .xp-bar {
+      height: 12px;
+      background-color: #444;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .xp-fill {
+      height: 100%;
+      width: 0%;
+      background-color: white;
+      transition: width 0.4s ease;
+    }
+
+    .credits {
+      margin-top: 20px;
+      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
-
-<script>
-  const allowedURL = "https://doritosrverygood184.github.io/ForsakenLevelCalculator/";
-  if (window.location.href !== allowedURL) {
-    document.body.innerHTML = `
-      <div id="stolenOverlay">
-        <h1>This is not the official Forsaken Level Calculator site</h1>
-        <p>This version was likely stolen or cloned. Please visit the original site instead:</p>
-        <a href="https://doritosrverygood184.github.io/ForsakenLevelCalculator/" target="_blank">
-          https://doritosrverygood184.github.io/ForsakenLevelCalculator/
-        </a>
-      </div>
-    `;
-  }
-</script>
-
-<!-- Popup -->
-<div id="overlay"></div>
-<div id="browserPopup">
-  <button id="closeBtn" aria-label="Close" onclick="closePopup()">×</button>
-  <img src="https://static.wikia.nocookie.net/6e7bff6d-b97f-49f6-a341-4cf3c08446a8" alt="Notice Image" />
-  <h2>Level Calculator</h2>
-  <hr />
-  <p>For the best experience,<br />please use a Google browser!</p>
-  <div id="dontShow">
-    <input type="checkbox" id="checkbox" /> <label for="checkbox">Don't show again?</label>
-  </div>
-</div>
-
-<!-- Background -->
-<div class="background-split">
-  <div class="left"></div>
-  <div class="right"></div>
-</div>
-
-<!-- Header -->
-<div class="header">
-  <img src="https://static.wikia.nocookie.net/6e7bff6d-b97f-49f6-a341-4cf3c08446a8" alt="Forsaken Logo" class="logo" />
-  <div class="title">Level Calculator</div>
-</div>
-
-<!-- Calculator UI -->
-<div class="calculator-section" style="max-width:600px; margin:0 auto; padding:20px; background:#fff; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.2);">
-  <label for="currentLevel">Current Level:</label>
-  <input type="number" id="currentLevel" min="1" max="100" value="1" />
-  <label for="currentXP">Current XP (within level):</label>
-  <input type="number" id="currentXP" min="0" value="0" />
-  <label for="targetLevel">Target Level:</label>
-  <input type="number" id="targetLevel" min="1" max="100" value="10" />
-  <br/><br/>
-  <input type="checkbox" id="vipBoost" />
-  <label for="vipBoost">VIP XP Boost (1.25× XP)</label>
-  <br/><br/>
-  <button onclick="calculateXP()">Calculate XP Needed</button>
-  <div id="result"></div>
-</div>
-
-<!-- XP Bar -->
-<div class="level-section">
-  <div class="level-bar">
-    <div class="level-text" id="levelText">Level 1</div>
-    <div class="xp-text" id="xpText">0/100 XP</div>
-    <div class="bar-container">
-      <div class="bar-fill" id="barFill"></div>
+  <div class="overlay"></div>
+  <div class="container">
+    <div class="title">
+      <img src="https://static.wikia.nocookie.net/6e7bff6d-b97f-49f6-a341-4cf3c08446a8" style="width: 150px;"><br>
+      Level Calculator
     </div>
+    <div class="calculator">
+      <label for="currentLevel">Current Level:</label>
+      <input type="number" id="currentLevel" min="1" max="100" value="1" />
+      <br>
+      <label for="currentXP">Current XP (within level):</label>
+      <input type="number" id="currentXP" min="0" value="0" />
+      <br>
+      <label for="targetLevel">Target Level:</label>
+      <input type="number" id="targetLevel" min="1" max="100" value="2" />
+      <br>
+      <div class="vip-check">
+        <input type="checkbox" id="vipBoost" />
+        <label for="vipBoost">VIP XP Boost (1.25x)</label>
+      </div>
+      <button onclick="calculateXP()">Calculate XP Needed</button>
+    </div>
+    <div class="xp-display" id="xpDisplay" style="display: none;">
+      <div class="xp-level" id="levelText">Level 1</div>
+      <div class="xp-progress" id="xpText">0 / 100 XP</div>
+      <div class="xp-bar">
+        <div class="xp-fill" id="xpBar"></div>
+      </div>
+    </div>
+    <div class="credits">Made for Forsaken</div>
   </div>
-  <div id="xpNeededMsg"></div>
-  <ul id="recommendations"></ul>
-</div>
 
-<!-- Credits -->
-<div class="credits">
-  Created by <b><i>Meh (On Discord)</i></b> &middot; Inspired by <b><i>Forsaken on Roblox</i></b>
-</div>
-
-<!-- Script -->
-<script>
-  function isChrome() {
-    const ua = navigator.userAgent.toLowerCase();
-    return ua.includes("chrome") && !ua.includes("edg") && !ua.includes("opr");
-  }
-
-  function showPopup() {
-    document.getElementById('browserPopup').style.display = 'block';
-    document.getElementById('overlay').style.display = 'block';
-  }
-  function closePopup() {
-    if (document.getElementById('checkbox').checked) {
-      localStorage.setItem('noPopup', 'true');
-    }
-    document.getElementById('browserPopup').style.display = 'none';
-    document.getElementById('overlay').style.display = 'none';
-  }
-
-  window.addEventListener('load', () => {
-    const noPopup = localStorage.getItem('noPopup') === 'true';
-    if (!isChrome() && !noPopup) {
-      showPopup();
-    }
-  });
-
-  function xpBetweenLevels(level) {
-    if (level > 100) level = 100;
-    return 100 + (level - 1) * 10;
-  }
-
-  function totalXPToLevel(level) {
-    if (level > 100) level = 100;
-    let totalXP = 0;
-    for (let lvl = 1; lvl < level; lvl++) {
-      totalXP += xpBetweenLevels(lvl);
-    }
-    return totalXP;
-  }
-
-  function updateLevelBar(level, totalXPNeeded, currentXPInLevel) {
-    document.getElementById('levelText').innerText = `Level ${level}`;
-    document.getElementById('xpText').innerText = `${currentXPInLevel}/${totalXPNeeded} XP`;
-    const fillPercent = (currentXPInLevel / totalXPNeeded) * 100;
-    document.getElementById('barFill').style.width = fillPercent + '%';
-  }
-
-  function calculateXP() {
-    let currentLevel = parseInt(document.getElementById('currentLevel').value);
-    let currentXP = parseInt(document.getElementById('currentXP').value);
-    let targetLevel = parseInt(document.getElementById('targetLevel').value);
-
-    if (currentLevel > 100) currentLevel = 100;
-    if (targetLevel > 100) targetLevel = 100;
-
-    if (isNaN(currentLevel) || isNaN(currentXP) || isNaN(targetLevel)) {
-      document.getElementById('result').innerText = 'Please enter valid numbers.';
-      document.getElementById('xpNeededMsg').innerText = '';
-      document.getElementById('recommendations').innerHTML = '';
-      return;
+  <script>
+    function getXPForLevel(level) {
+      return 100 + (level - 1) * 20; // example formula
     }
 
-    if (currentLevel < 1 || targetLevel < 1) {
-      document.getElementById('result').innerText = 'Levels must be at least 1.';
-      document.getElementById('xpNeededMsg').innerText = '';
-      document.getElementById('recommendations').innerHTML = '';
-      return;
+    function calculateXP() {
+      const currentLevel = parseInt(document.getElementById("currentLevel").value);
+      const currentXP = parseInt(document.getElementById("currentXP").value);
+      const targetLevel = parseInt(document.getElementById("targetLevel").value);
+      const vipChecked = document.getElementById("vipBoost").checked;
+
+      if (isNaN(currentLevel) || isNaN(currentXP) || isNaN(targetLevel)) return;
+
+      let totalXP = -currentXP; // Subtract current XP from first level
+      for (let level = currentLevel; level < targetLevel; level++) {
+        totalXP += getXPForLevel(level);
+      }
+
+      if (vipChecked) totalXP = Math.ceil(totalXP / 1.25); // Reduce needed XP due to boost
+
+      const xpDisplay = document.getElementById("xpDisplay");
+      const levelText = document.getElementById("levelText");
+      const xpText = document.getElementById("xpText");
+      const xpBar = document.getElementById("xpBar");
+
+      levelText.innerText = `Level ${currentLevel}`;
+      const nextLevelXP = getXPForLevel(currentLevel);
+      const progress = Math.min(100, (currentXP / nextLevelXP) * 100);
+      xpText.innerText = `${currentXP} / ${nextLevelXP} XP`;
+      xpBar.style.width = `${progress}%`;
+
+      xpDisplay.style.display = "block";
+
+      alert(`You need ${totalXP} XP to reach level ${targetLevel}${vipChecked ? " (VIP Boost Applied)" : ""}.`);
     }
-
-    const maxXPCurrentLevel = xpBetweenLevels(currentLevel);
-    if (currentXP > maxXPCurrentLevel) {
-      currentXP = maxXPCurrentLevel;
-      document.getElementById('currentXP').value = currentXP;
-    }
-
-    if (targetLevel <= currentLevel) {
-      document.getElementById('result').innerText = 'Target level must be higher than current level.';
-      document.getElementById('xpNeededMsg').innerText = '';
-      document.getElementById('recommendations').innerHTML = '';
-      return;
-    }
-
-    const totalXPCurrent = totalXPToLevel(currentLevel) + currentXP;
-    const totalXPTarget = totalXPToLevel(targetLevel);
-    const xpNeeded = totalXPTarget - totalXPCurrent;
-
-    document.getElementById('xpNeededMsg').innerText = `You need ${xpNeeded} XP to reach level ${targetLevel}, so you would have to...`;
-
-    const vipEnabled = document.getElementById('vipBoost').checked;
-    const gameXP = vipEnabled ? 120 * 1.25 : 120;
-    const puzzleXP = vipEnabled ? 15 * 1.25 : 15;
-
-    const games = Math.ceil(xpNeeded / gameXP);
-    const puzzles = Math.ceil(xpNeeded / puzzleXP);
-
-    document.getElementById('recommendations').innerHTML = `
-      <li>Win ${games} game${games !== 1 ? 's' : ''}</li>
-      or
-      <li>Do ${puzzles} generator puzzle${puzzles !== 1 ? 's' : ''}</li>
-    `;
-
-    updateLevelBar(currentLevel, xpBetweenLevels(currentLevel), currentXP);
-  }
-
-  window.onload = () => {
-    const level = parseInt(document.getElementById('currentLevel').value);
-    const currentXP = parseInt(document.getElementById('currentXP').value);
-    updateLevelBar(level, xpBetweenLevels(level), currentXP);
-  };
-
-  document.getElementById('currentLevel').addEventListener('change', () => {
-    let level = parseInt(document.getElementById('currentLevel').value);
-    if (level > 100) level = 100;
-    if (level < 1) level = 1;
-    document.getElementById('currentLevel').value = level;
-    const currentXP = parseInt(document.getElementById('currentXP').value);
-    const maxXP = xpBetweenLevels(level);
-    if (currentXP > maxXP) document.getElementById('currentXP').value = maxXP;
-    updateLevelBar(level, maxXP, parseInt(document.getElementById('currentXP').value));
-  });
-
-  document.getElementById('currentXP').addEventListener('change', () => {
-    let level = parseInt(document.getElementById('currentLevel').value);
-    let currentXP = parseInt(document.getElementById('currentXP').value);
-    const maxXP = xpBetweenLevels(level);
-    if (currentXP > maxXP) currentXP = maxXP;
-    if (currentXP < 0) currentXP = 0;
-    document.getElementById('currentXP').value = currentXP;
-    updateLevelBar(level, maxXP, currentXP);
-  });
-</script>
-
+  </script>
 </body>
 </html>
