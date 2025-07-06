@@ -13,7 +13,6 @@
       color: #222;
     }
 
-    /* Warning overlay for stolen site */
     #stolenOverlay {
       position: fixed;
       top: 0;
@@ -38,7 +37,6 @@
       text-decoration: underline;
     }
 
-    /* Background split animation */
     .background-split {
       position: fixed;
       top: 0;
@@ -186,6 +184,7 @@
       width: 0%;
       background-color: #fff;
       border-radius: 0;
+      transition: width 0.4s ease-in-out;
     }
     .credits {
       text-align: center;
@@ -198,8 +197,6 @@
       font-weight: bold;
       font-style: italic;
     }
-
-    /* Browser Warning Popup */
 
     #overlay {
       display: none;
@@ -280,7 +277,7 @@
   }
 </script>
 
-<!-- Browser Warning Popup & overlay -->
+<!-- Popup -->
 <div id="overlay"></div>
 <div id="browserPopup">
   <button id="closeBtn" aria-label="Close" onclick="closePopup()">×</button>
@@ -314,11 +311,14 @@
   <label for="targetLevel">Target Level:</label>
   <input type="number" id="targetLevel" min="1" max="100" value="10" />
   <br/><br/>
+  <input type="checkbox" id="vipBoost" />
+  <label for="vipBoost">VIP XP Boost (1.25× XP)</label>
+  <br/><br/>
   <button onclick="calculateXP()">Calculate XP Needed</button>
   <div id="result"></div>
 </div>
 
-<!-- Level bar and results -->
+<!-- XP Bar -->
 <div class="level-section">
   <div class="level-bar">
     <div class="level-text" id="levelText">Level 1</div>
@@ -336,8 +336,8 @@
   Created by <b><i>Meh (On Discord)</i></b> &middot; Inspired by <b><i>Forsaken on Roblox</i></b>
 </div>
 
+<!-- Script -->
 <script>
-  // Browser detection and popup logic
   function isChrome() {
     const ua = navigator.userAgent.toLowerCase();
     return ua.includes("chrome") && !ua.includes("edg") && !ua.includes("opr");
@@ -361,8 +361,6 @@
       showPopup();
     }
   });
-
-  // XP calculator code
 
   function xpBetweenLevels(level) {
     if (level > 100) level = 100;
@@ -426,8 +424,12 @@
 
     document.getElementById('xpNeededMsg').innerText = `You need ${xpNeeded} XP to reach level ${targetLevel}, so you would have to...`;
 
-    const games = Math.ceil(xpNeeded / 120);
-    const puzzles = Math.ceil(xpNeeded / 15);
+    const vipEnabled = document.getElementById('vipBoost').checked;
+    const gameXP = vipEnabled ? 120 * 1.25 : 120;
+    const puzzleXP = vipEnabled ? 15 * 1.25 : 15;
+
+    const games = Math.ceil(xpNeeded / gameXP);
+    const puzzles = Math.ceil(xpNeeded / puzzleXP);
 
     document.getElementById('recommendations').innerHTML = `
       <li>Win ${games} game${games !== 1 ? 's' : ''}</li>
