@@ -2,21 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Forsaken Level Calculator</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet" />
   <style>
-    /* Base styles */
     body {
       margin: 0;
       background-color: rgba(211, 211, 211, 0.8);
       font-family: Arial, sans-serif;
       color: #222;
-      transition: background-color 0.5s ease, color 0.5s ease;
-    }
-    body.dark {
-      background-color: #181a1b;
-      color: #eee;
     }
 
     #stolenOverlay {
@@ -93,8 +87,7 @@
     .header .title {
       font-family: 'Playfair Display', serif;
       font-size: 28px;
-      color: inherit;
-      transition: color 0.5s ease;
+      color: #222;
     }
     label {
       font-family: 'Playfair Display', serif;
@@ -108,30 +101,13 @@
       margin-left: 10px;
       margin-right: 20px;
       font-family: Arial, sans-serif;
-      border-radius: 4px;
-      border: 1px solid #aaa;
-      transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
-    }
-    body.dark input[type="number"] {
-      background-color: #222;
-      color: #eee;
-      border-color: #555;
     }
     button {
       margin-top: 15px;
       padding: 8px 16px;
       font-family: 'Playfair Display', serif;
       cursor: pointer;
-      border-radius: 6px;
-      border: none;
-      background-color: #444;
-      color: #fff;
-      transition: background-color 0.3s ease;
     }
-    button:hover {
-      background-color: #666;
-    }
-
     #result {
       margin-top: 15px;
       font-family: 'Playfair Display', serif;
@@ -150,14 +126,7 @@
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
       text-align: center;
-      transition: background-color 0.5s ease, color 0.5s ease;
     }
-    body.dark #xpNeededMsg {
-      background-color: #181a1b;
-      color: #eee;
-      box-shadow: 0 0 12px #0ff;
-    }
-
     #recommendations {
       margin-top: 15px;
       font-family: 'Playfair Display', serif;
@@ -190,11 +159,6 @@
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
       width: 350px;
-      color: #eee;
-    }
-    body.dark .level-bar {
-      background-color: #111;
-      box-shadow: 0 0 15px #0ff;
     }
     .level-text {
       font-size: 24px;
@@ -228,10 +192,6 @@
       font-family: 'Playfair Display', serif;
       font-size: 16px;
       color: #222;
-      transition: color 0.5s ease;
-    }
-    body.dark .credits {
-      color: #eee;
     }
     .credits b.i {
       font-weight: bold;
@@ -298,60 +258,6 @@
       user-select: none;
       cursor: pointer;
     }
-
-    /* Clear Button */
-    #clearBtn {
-      margin-left: 10px;
-      background-color: #c33;
-      border-radius: 6px;
-    }
-    #clearBtn:hover {
-      background-color: #e55;
-    }
-
-    /* XP Breakdown */
-    #xpBreakdown {
-      margin-top: 20px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-      background-color: #fff;
-      border-radius: 8px;
-      padding: 10px;
-      font-family: 'Playfair Display', serif;
-      font-size: 14px;
-      color: #222;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      max-height: 200px;
-      overflow-y: auto;
-      text-align: left;
-      transition: background-color 0.5s ease, color 0.5s ease;
-    }
-    body.dark #xpBreakdown {
-      background-color: #181a1b;
-      color: #eee;
-      box-shadow: 0 0 12px #0ff;
-    }
-
-    /* Dark mode toggle button */
-    #darkModeToggle {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      background-color: #222;
-      color: #eee;
-      border: none;
-      border-radius: 6px;
-      padding: 8px 12px;
-      font-family: 'Playfair Display', serif;
-      cursor: pointer;
-      z-index: 100002;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-    #darkModeToggle:hover {
-      background-color: #0ff;
-      color: #000;
-    }
   </style>
 </head>
 <body>
@@ -396,11 +302,8 @@
   <div class="title">Level Calculator</div>
 </div>
 
-<!-- Dark mode toggle -->
-<button id="darkModeToggle" aria-label="Toggle dark mode">Dark Mode</button>
-
 <!-- Calculator UI -->
-<div class="calculator-section" style="max-width:600px; margin:0 auto; padding:20px; background:#fff; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.2); transition: background-color 0.5s ease, color 0.5s ease;">
+<div class="calculator-section" style="max-width:600px; margin:0 auto; padding:20px; background:#fff; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.2);">
   <label for="currentLevel">Current Level:</label>
   <input type="number" id="currentLevel" min="1" max="100" value="1" />
   <label for="currentXP">Current XP (within level):</label>
@@ -412,7 +315,6 @@
   <label for="vipBoost">VIP XP Boost (1.25× XP)</label>
   <br/><br/>
   <button onclick="calculateXP()">Calculate XP Needed</button>
-  <button id="clearBtn" onclick="clearAll()">Clear</button>
   <div id="result"></div>
 </div>
 
@@ -427,7 +329,6 @@
   </div>
   <div id="xpNeededMsg"></div>
   <ul id="recommendations"></ul>
-  <div id="xpBreakdown"></div>
 </div>
 
 <!-- Credits -->
@@ -435,12 +336,13 @@
   Created by <b><i>Meh (On Discord)</i></b> &middot; Inspired by <b><i>Forsaken on Roblox</i></b>
 </div>
 
+<!-- Script -->
 <script>
-  // Browser check and popup code (unchanged)
   function isChrome() {
     const ua = navigator.userAgent.toLowerCase();
     return ua.includes("chrome") && !ua.includes("edg") && !ua.includes("opr");
   }
+
   function showPopup() {
     document.getElementById('browserPopup').style.display = 'block';
     document.getElementById('overlay').style.display = 'block';
@@ -452,6 +354,7 @@
     document.getElementById('browserPopup').style.display = 'none';
     document.getElementById('overlay').style.display = 'none';
   }
+
   window.addEventListener('load', () => {
     const noPopup = localStorage.getItem('noPopup') === 'true';
     if (!isChrome() && !noPopup) {
@@ -459,11 +362,11 @@
     }
   });
 
-  // XP Calculations
   function xpBetweenLevels(level) {
     if (level > 100) level = 100;
     return 100 + (level - 1) * 10;
   }
+
   function totalXPToLevel(level) {
     if (level > 100) level = 100;
     let totalXP = 0;
@@ -472,6 +375,7 @@
     }
     return totalXP;
   }
+
   function updateLevelBar(level, totalXPNeeded, currentXPInLevel) {
     document.getElementById('levelText').innerText = `Level ${level}`;
     document.getElementById('xpText').innerText = `${currentXPInLevel}/${totalXPNeeded} XP`;
@@ -489,12 +393,15 @@
 
     if (isNaN(currentLevel) || isNaN(currentXP) || isNaN(targetLevel)) {
       document.getElementById('result').innerText = 'Please enter valid numbers.';
-      clearOutputs();
+      document.getElementById('xpNeededMsg').innerText = '';
+      document.getElementById('recommendations').innerHTML = '';
       return;
     }
+
     if (currentLevel < 1 || targetLevel < 1) {
       document.getElementById('result').innerText = 'Levels must be at least 1.';
-      clearOutputs();
+      document.getElementById('xpNeededMsg').innerText = '';
+      document.getElementById('recommendations').innerHTML = '';
       return;
     }
 
@@ -503,9 +410,11 @@
       currentXP = maxXPCurrentLevel;
       document.getElementById('currentXP').value = currentXP;
     }
+
     if (targetLevel <= currentLevel) {
       document.getElementById('result').innerText = 'Target level must be higher than current level.';
-      clearOutputs();
+      document.getElementById('xpNeededMsg').innerText = '';
+      document.getElementById('recommendations').innerHTML = '';
       return;
     }
 
@@ -529,56 +438,14 @@
     `;
 
     updateLevelBar(currentLevel, xpBetweenLevels(currentLevel), currentXP);
-
-    // XP breakdown by level
-    let breakdownHTML = '<strong>XP Needed per Level:</strong><br/><ul>';
-    for(let lvl = currentLevel; lvl < targetLevel; lvl++) {
-      // XP needed in this level:
-      let xpThisLevel;
-      if(lvl === currentLevel) {
-        xpThisLevel = xpBetweenLevels(lvl) - currentXP;
-      } else {
-        xpThisLevel = xpBetweenLevels(lvl);
-      }
-      breakdownHTML += `<li>Level ${lvl} → ${lvl+1}: ${xpThisLevel} XP</li>`;
-    }
-    breakdownHTML += '</ul>';
-    document.getElementById('xpBreakdown').innerHTML = breakdownHTML;
-
-    // Clear "result" message
-    document.getElementById('result').innerText = '';
   }
 
-  function clearOutputs() {
-    document.getElementById('xpNeededMsg').innerText = '';
-    document.getElementById('recommendations').innerHTML = '';
-    document.getElementById('xpBreakdown').innerHTML = '';
-    document.getElementById('result').innerText = '';
-  }
-
-  function clearAll() {
-    document.getElementById('currentLevel').value = 1;
-    document.getElementById('currentXP').value = 0;
-    document.getElementById('targetLevel').value = 10;
-    document.getElementById('vipBoost').checked = false;
-    clearOutputs();
-    updateLevelBar(1, xpBetweenLevels(1), 0);
-  }
-
-  // Initialize bar on page load
   window.onload = () => {
     const level = parseInt(document.getElementById('currentLevel').value);
     const currentXP = parseInt(document.getElementById('currentXP').value);
     updateLevelBar(level, xpBetweenLevels(level), currentXP);
-
-    // Load dark mode preference
-    if(localStorage.getItem('darkMode') === 'true') {
-      document.body.classList.add('dark');
-      document.getElementById('darkModeToggle').innerText = 'Light Mode';
-    }
   };
 
-  // Input validation and bar update handlers
   document.getElementById('currentLevel').addEventListener('change', () => {
     let level = parseInt(document.getElementById('currentLevel').value);
     if (level > 100) level = 100;
@@ -598,14 +465,6 @@
     if (currentXP < 0) currentXP = 0;
     document.getElementById('currentXP').value = currentXP;
     updateLevelBar(level, maxXP, currentXP);
-  });
-
-  // Dark mode toggle
-  document.getElementById('darkModeToggle').addEventListener('click', () => {
-    document.body.classList.toggle('dark');
-    const darkEnabled = document.body.classList.contains('dark');
-    localStorage.setItem('darkMode', darkEnabled ? 'true' : 'false');
-    document.getElementById('darkModeToggle').innerText = darkEnabled ? 'Light Mode' : 'Dark Mode';
   });
 </script>
 
