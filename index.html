@@ -8,9 +8,9 @@
   <style>
     body {
       margin: 0;
-      background-color: rgba(211, 211, 211, 0.8);
+      background-color: #1a1a1a;
       font-family: Arial, sans-serif;
-      color: #222;
+      color: #fff;
     }
 
     #stolenOverlay {
@@ -87,11 +87,11 @@
     .header .title {
       font-family: 'Playfair Display', serif;
       font-size: 28px;
-      color: #222;
+      color: #fff;
     }
+
     label {
       font-family: 'Playfair Display', serif;
-      font-weight: normal;
       display: inline-block;
       margin-top: 10px;
     }
@@ -101,12 +101,21 @@
       margin-left: 10px;
       margin-right: 20px;
       font-family: Arial, sans-serif;
+      background-color: #444;
+      color: #fff;
+      border: 1px solid #666;
+    }
+    input[type="checkbox"] {
+      transform: scale(1.2);
     }
     button {
       margin-top: 15px;
       padding: 8px 16px;
       font-family: 'Playfair Display', serif;
       cursor: pointer;
+      background-color: #444;
+      color: #fff;
+      border: 1px solid #888;
     }
     #result {
       margin-top: 15px;
@@ -122,7 +131,7 @@
       margin-left: auto;
       margin-right: auto;
       padding: 10px;
-      background-color: #fff;
+      background-color: #2b2b2b;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
       text-align: center;
@@ -140,12 +149,14 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      color: #fff;
     }
     #recommendations li {
       margin-bottom: 8px;
       width: 100%;
       text-align: center;
     }
+
     .level-section {
       margin-top: 30px;
       display: flex;
@@ -160,23 +171,18 @@
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
       width: 350px;
     }
-    .level-text {
-      font-size: 24px;
-      margin-bottom: 4px;
-      color: #fff;
-    }
+    .level-text,
     .xp-text {
-      font-size: 18px;
-      margin-bottom: 6px;
       color: #fff;
     }
+
     .bar-container {
       width: 300px;
       height: 12px;
-      background: linear-gradient(to right, #bbb, #666);
+      background: linear-gradient(to right, #555, #222);
       border-radius: 0;
       overflow: hidden;
-      box-shadow: 0 0 4px #333;
+      box-shadow: 0 0 4px #000;
       margin: 0 auto;
     }
     .bar-fill {
@@ -186,16 +192,23 @@
       border-radius: 0;
       transition: width 0.4s ease-in-out;
     }
+
+    .calculator-section {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #2b2b2b;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      color: #fff;
+    }
+
     .credits {
       text-align: center;
       margin-top: 40px;
       font-family: 'Playfair Display', serif;
       font-size: 16px;
-      color: #222;
-    }
-    .credits b.i {
-      font-weight: bold;
-      font-style: italic;
+      color: #ccc;
     }
 
     #overlay {
@@ -211,8 +224,8 @@
       position: fixed;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      background-color: #333;
-      color: #eee;
+      background-color: #2b2b2b;
+      color: #fff;
       border: 2px solid #888;
       padding: 20px;
       box-shadow: 0 0 15px rgba(0,0,0,0.6);
@@ -257,11 +270,11 @@
       font-size: 14px;
       user-select: none;
       cursor: pointer;
+      color: #ccc;
     }
   </style>
 </head>
 <body>
-
 <script>
   const allowedURL = "https://doritosrverygood184.github.io/ForsakenLevelCalculator/";
   if (window.location.href !== allowedURL) {
@@ -303,7 +316,7 @@
 </div>
 
 <!-- Calculator UI -->
-<div class="calculator-section" style="max-width:600px; margin:0 auto; padding:20px; background:#fff; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.2);">
+<div class="calculator-section">
   <label for="currentLevel">Current Level:</label>
   <input type="number" id="currentLevel" min="1" max="100" value="1" />
   <label for="currentXP">Current XP (within level):</label>
@@ -467,6 +480,5 @@
     updateLevelBar(level, maxXP, currentXP);
   });
 </script>
-
 </body>
 </html>
